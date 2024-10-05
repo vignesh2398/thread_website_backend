@@ -5,15 +5,16 @@ const cors = require('cors');
 const apiRoutes = require('./routes/api');
 const loginRoutes = require('./routes/loginRoutes');
 const dotenv= require("dotenv");
-
+const mongoose = require('mongoose');
+const cookieParser = require('cookie-parser');
 const app = express();
 dotenv.config();
-console.log(process.env.CLIENT_ID)
 const PORT = process.env.PORT || 4200;
 
 // Middleware
 app.use(bodyParser.json());
 app.use(cors());
+app.use(cookieParser());
 function errorHandling(err, req, res, next) {
 // Log the error message
 
@@ -25,6 +26,7 @@ function errorHandling(err, req, res, next) {
   });
 }
 // Routes
+
 app.use('/api', apiRoutes,loginRoutes);
 app.use(errorHandling)
 // app.use('/login', loginRoutes);
@@ -37,4 +39,11 @@ app.get('/', (req, res) => {
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
-});
+
+  mongoose.connect(process.env.DATABASE_URL,{
+  }).then((data)=>{
+    console.log("DB connected")
+  }).catch((error)=>{
+    console.log("error",error)
+  })
+})

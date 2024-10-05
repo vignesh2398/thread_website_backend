@@ -21,8 +21,6 @@ module.exports.token = async (code) => {
         },
       }
     );
-
-    const { access_token, refresh_token, id_token, expires_in } =tokenResponse.data;
     return tokenResponse.data;
   } catch (error) {
     throw error;
