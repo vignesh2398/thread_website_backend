@@ -7,6 +7,7 @@ const loginRoutes = require('./routes/loginRoutes');
 const dotenv= require("dotenv");
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
+const { profile } = require('./loginPage/controller/modules/profile');
 const app = express();
 dotenv.config();
 const PORT = process.env.PORT || 4200;
@@ -26,7 +27,6 @@ function errorHandling(err, req, res, next) {
   });
 }
 // Routes
-
 app.use('/api', apiRoutes,loginRoutes);
 app.use(errorHandling)
 // app.use('/login', loginRoutes);
@@ -39,11 +39,13 @@ app.get('/', (req, res) => {
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
-
+  
   mongoose.connect(process.env.DATABASE_URL,{
   }).then((data)=>{
     console.log("DB connected")
+    console.log(mongoose.connection.readyState)
   }).catch((error)=>{
     console.log("error",error)
   })
 })
+
